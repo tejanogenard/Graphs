@@ -76,7 +76,7 @@ class Graph:
         s = Stack() 
 
         # Add starting vertex ID 
-        s.enqueue(starting_vertex)
+        s.push(starting_vertex)
 
         # Create set for visited verts 
         visited = set() 
@@ -85,7 +85,7 @@ class Graph:
         while s.size() > 0: 
         
             # Dequeue a vert 
-            v = s.dequeue() 
+            v = s.pop() 
 
             # If not visited 
             if v not in visited:
@@ -98,7 +98,7 @@ class Graph:
 
                 # Add all neighbors to the queue 
                 for neighbor in self.get_neighbors(v):
-                    s.enqueue(neighbor)
+                    s.push(neighbor)
  
 
 
@@ -119,13 +119,13 @@ class Graph:
         """
      # Create an empty queue and enqueue A PATH TO the starting vertex ID
         q = Queue()
-        q.enqueue(starting_vertex)
+        q.enqueue([starting_vertex])
 
         # Create a Set to store visited vertices
         visited = set() 
 
         # While the queue is not empty...
-        while q.size > 0:
+        while q.size() > 0:
              # Dequeue the first PATH
             path = q.dequeue() 
       
@@ -144,9 +144,12 @@ class Graph:
                 # Then add A PATH TO its neighbors to the back of the queue
                 for neighbor in self.get_neighbors(v):
                     # Copy the path 
-                    path_Copy = path.copy()
+                    path2 = path.copy()
                     # APPEND THE NEIGHOR TO THE BACK
-                    path_Copy.append(neighbor)
+                    path2.append(neighbor)
+
+                    # add our Path to the queue  
+                    q.enqueue(path2)
 
 
     def dfs(self, starting_vertex, destination_vertex):
@@ -156,16 +159,16 @@ class Graph:
         depth-first order.
         """
          # Create an empty queue and enqueue A PATH TO the starting vertex ID
-        s = Queue()
-        s.enqueue(starting_vertex)
+        s = Stack()
+        s.push(starting_vertex)
 
         # Create a Set to store visited vertices
         visited = set() 
 
         # While the queue is not empty...
-        while s.size > 0:
+        while s.size() > 0:
              # Dequeue the first PATH
-            path = s.dequeue() 
+            path = s.pop() 
       
             # Grab the last vertex from the PATH
             v = path[-1]
