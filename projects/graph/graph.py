@@ -170,7 +170,7 @@ class Graph:
         """
          # Create an empty queue and enqueue A PATH TO the starting vertex ID
         s = Stack()
-        s.push(starting_vertex)
+        s.push([starting_vertex])
 
         # Create a Set to store visited vertices
         visited = set() 
@@ -198,6 +198,8 @@ class Graph:
                     path_Copy = path.copy()
                     # APPEND THE NEIGHOR TO THE BACK
                     path_Copy.append(neighbor)
+
+                    s.push(path_Copy)
 
     def dfs_recursive(self, starting_vertex, destination_vertex, visited=None, path=None):
         """
