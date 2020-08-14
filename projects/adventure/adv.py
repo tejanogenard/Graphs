@@ -1,6 +1,7 @@
 from room import Room
 from player import Player
 from world import World
+from util import Queue, Stack
 
 import random
 from ast import literal_eval
@@ -11,10 +12,11 @@ world = World()
 
 # You may uncomment the smaller graphs for development and testing purposes.
 # map_file = "maps/test_line.txt"
-# map_file = "maps/test_cross.txt"
+map_file = "maps/test_cross.txt"
 # map_file = "maps/test_loop.txt"
 # map_file = "maps/test_loop_fork.txt"
-map_file = "maps/main_maze.txt"
+# map_file = "maps/main_maze.txt"
+
 
 # Loads the map into a dictionary
 room_graph=literal_eval(open(map_file, "r").read())
@@ -28,6 +30,53 @@ player = Player(world.starting_room)
 # Fill this out with directions to walk
 # traversal_path = ['n', 'n']
 traversal_path = []
+
+# we need to keep track of the rooms we've already visited 
+visited = {}
+
+
+#####################################################################
+# function to traverse my map
+
+# Parameters: nothing 
+# Returns: nothing 
+# examples: [.....]
+# data structures: Queue or Stack to return the shortest path to the 
+
+# psudeo: 
+
+# the player will begin at the starting node 
+# the player will move in a random unexplored direction from the players current location
+# the player will travel to that location and we'll mark it as a visited room
+# when the player reaches a dead end they will back-track to the nearest room
+#   that contains an unexpored path. 
+
+def traverse_map(): 
+   # initalize current var to keep track of where the player will 
+    current = player.current_room
+   # get all the avaliable exits to the player 
+    exits = player.current_room.get_exits() 
+   # initalize a list the represents the traveled path 
+    pathway = []
+    # for every direction in exits:
+        # if the current rooms directions (i.e "n, s, e, w") has not been visited: 
+        # move in that direction and add it to our pathway 
+        # if the length of the 
+#####################################################################
+ # LOGIC:
+
+ # while worlds_rooms > visited_rooms:
+ # traverse the map()
+ # if visited_rooms != worlds_rooms:
+ # create our path: path = []
+ # 
+
+
+
+
+
+
+
 
 
 
@@ -45,7 +94,6 @@ if len(visited_rooms) == len(room_graph):
 else:
     print("TESTS FAILED: INCOMPLETE TRAVERSAL")
     print(f"{len(room_graph) - len(visited_rooms)} unvisited rooms")
-
 
 
 #######

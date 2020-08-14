@@ -198,7 +198,7 @@ class Graph:
                     path_Copy = path.copy()
                     # APPEND THE NEIGHOR TO THE BACK
                     path_Copy.append(neighbor)
-
+                    # add our Path to he stack
                     s.push(path_Copy)
 
     def dfs_recursive(self, starting_vertex, destination_vertex, visited=None, path=None):
