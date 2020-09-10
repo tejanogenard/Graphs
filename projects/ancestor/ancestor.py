@@ -1,67 +1,101 @@
-from util import Queue 
-from util import Stack
+
+
+class Queue():
+    def __init__(self):
+        self.queue = []
+    def enqueue(self, value):
+        self.queue.append(value)
+    def dequeue(self):
+        if self.size() > 0:
+            return self.queue.pop(0)
+        else:
+            return None
+    def size(self):
+        return len(self.queue)
+
+
+class Stack():
+    def __init__(self):
+        self.stack = []
+    def push(self, value):
+        self.stack.append(value)
+    def pop(self):
+        if self.size() > 0:
+            return self.stack.pop()
+        else:
+            return None
+    def size(self):
+        return len(self.stack)
+
+
 
 def earliest_ancestor(ancestors, starting_node):
+
+    vertices = {} 
+
+# set our children as our keys and the parents as the value of each key 
+
+    for i in ancestors: 
+        if i[1] not in vertices: 
+            vertices[i[1]] = set() 
+
+        vertices[i[1]].add(i[0])
+
+
+
+    def get_ancestors(vertex_id):
     
-# Use the ancestor information to build a graph
-        # Don't need a full graph, just information about what its parents are
-# Put it in a dictionary, the second value is the key and the first value is added to the list of neighbors
-# {node ID: [list of parents]}
-# For each node in the ancestors list, Initialize the key in the dictionary, and Add the parents into the value list
-# This creates a dictionary of all the nodes that have parents
-# If the node doesn't have a parent it isn't in the dictionary
+        if vertex_id in vertices.keys():
+            return vertices[vertex_id]
+        else: 
+            return [None]
 
-# Breadth first traversal saving completed paths to a list
-
-# Start at the starting node, if it has parents add the parents' paths to the queue
-        # If it doesn't have parents that is the end of the path, add the completed path to the output list
-# Look at the last item in the path to see if that item has parents
-        # if it does, add path to each parent to the queue
-        # If it doesn't, add that path to the output list
-# Create an empty queue
-# Enque a path to the starting node
-# Create a set to store visited paths
-# Create a list to store paths to compare lengths
-# While the queue is not empty
-    # Dequeue the first path
-    # Grab the last node of the path
-    # If the vertex has not been visited:
-         # add it to visited
-         # if the vertex is in the dictionary (i.e. if it has parents)
-                # Add a path to its parents to the queue
-                # Copy the path, Append the parent vertex to it, Add the next path to the end of the queue
- # If v doesn't have any parents, add the completed path to the list of paths
-# If we are here, we have calculated all the completed paths from the starting node
-    # Find the longest path
-    # If there are two longest paths, return the lower value end node
-        # Sort the list by length of lists
-            # If there is a tie sort again by the last value, ascending
-    # Our oldest ancestor is the last item of the first list
- # If there is no paths (only the starting node), return -1
-    # If the resulting path is equal to the starting node, return -1
-
+            # queue our starting node 
     q = Queue()
-    cache = {}
-    current = starting_node
+    # Initialize queue with starting the starting nod
+    q.enqueue([starting_node])
+    # create our visited set for our verticies   
+    visited = set() 
+    # create our path that we will be returning 
+    family_tree = []
 
-    q.enqueue(starting_node)
+            # While the queue is not empty 
+    while q.size() > 0:
 
-    for ancestor in ancestors:
-        parent = ancestor[0]
-        child = ancestor[1]
-        if child not in cache: 
-            cache[child] = parent
-            print(cache)
+        
+        family_path = q.dequeue()
+
+        ancestor = family_path[-1]
+
+        # if the ancestor is not in the visited set 
+        if ancestor not in visited: 
+            
+            # added the ancestor to the visited set 
+            visited.add(ancestor)
+
+            # add all the ancestors to the queue 
+            for child in get_ancestors(ancestor):
+                if child is not None:
+                    family_copy = family_path.copy()
+                    family_copy.append(ancestor)
+                    q.enqueue(family_copy)
+                elif ancestor == starting_node:
+                    return -1 
+
+            family_tree.append(family_path)
+
+    path = []
+
+    for i in family_tree:
+        if len(i) > len(path):
+            path = i 
+
+    return path[-1]
 
 
     
     
 
-test_ancestors = [(1, 3), (2, 3), (3, 6), (5, 6), (5, 7), (4, 5), (4, 8), (8, 9), (11, 8), (10, 1)]
-
-
-
-earliest_ancestor(test_ancestors, 1)
 
 
 
