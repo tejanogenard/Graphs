@@ -6,16 +6,17 @@ from util import Queue, Stack
 import random
 from ast import literal_eval
 
+
 # Load world
 world = World()
 
 
 # You may uncomment the smaller graphs for development and testing purposes.
 # map_file = "maps/test_line.txt"
-map_file = "maps/test_cross.txt"
+# map_file = "maps/test_cross.txt"
 # map_file = "maps/test_loop.txt"
 # map_file = "maps/test_loop_fork.txt"
-# map_file = "maps/main_maze.txt"
+map_file = "maps/main_maze.txt"
 
 
 # Loads the map into a dictionary
@@ -31,51 +32,48 @@ player = Player(world.starting_room)
 # traversal_path = ['n', 'n']
 traversal_path = []
 
-# we need to keep track of the rooms we've already visited 
+# def traverse_map(): 
+   # initalize a reversed set to traverse in a opposite direction 
+   # create a visited set
+   # initalize our path 
+   # get all exits for the current room
+   # travel in available direction
+   # check to see if a room has been visited 
+   # if not, add room to visited set 
+   # add the direction of the next room to traversal path 
+   # if we reach a dead end, then move in the opposite direction
+
+   
+
 visited = {}
 
 
-#####################################################################
-# function to traverse my map
 
-# Parameters: nothing 
-# Returns: nothing 
-# examples: [.....]
-# data structures: Queue or Stack to return the shortest path to the 
-
-# psudeo: 
-
-# the player will begin at the starting node 
-# the player will move in a random unexplored direction from the players current location
-# the player will travel to that location and we'll mark it as a visited room
-# when the player reaches a dead end they will back-track to the nearest room
-#   that contains an unexpored path. 
-
-def traverse_map(): 
-   # initalize current var to keep track of where the player will 
-    current = player.current_room
-   # get all the avaliable exits to the player 
-    exits = player.current_room.get_exits() 
-   # initalize a list the represents the traveled path 
-    pathway = []
-    # for every direction in exits:
-        # if the current rooms directions (i.e "n, s, e, w") has not been visited: 
-        # move in that direction and add it to our pathway 
-        # if the length of the 
-#####################################################################
- # LOGIC:
-
- # while worlds_rooms > visited_rooms:
- # traverse the map()
- # if visited_rooms != worlds_rooms:
- # create our path: path = []
- # 
-
-
-
-
-
-
+def traverse_map():
+    backwards = {'n': 's', 's': 'n', 'w': 'e', 'e': 'w'}
+    path = []
+    # get all possible directions for a room
+    for direction in player.current_room.get_exits():
+        #travel in a direction
+        player.travel(direction)
+        #if the room has been visited before 
+        if player.current_room.id in visited:
+            # travel in the opposite direction
+            player.travel(backwards[direction])
+        else:
+            # else add the room to the visited 
+            visited[player.current_room.id] = player.current_room.id 
+            # add the direction of the room to the path 
+            path.append(direction)
+            #call traverse_map for the next room
+            path += traverse_map() 
+            # travel in the opposite direction
+            player.travel(backwards[direction])
+            # add the reverse travel to  the path 
+            path.append(backwards[direction])
+    return path
+    
+traversal_path = traverse_map()
 
 
 
@@ -99,12 +97,12 @@ else:
 #######
 # UNCOMMENT TO WALK AROUND
 #######
-player.current_room.print_room_description(player)
-while True:
-    cmds = input("-> ").lower().split(" ")
-    if cmds[0] in ["n", "s", "e", "w"]:
-        player.travel(cmds[0], True)
-    elif cmds[0] == "q":
-        break
-    else:
-        print("I did not understand that command.")
+# player.current_room.print_room_description(player)
+# while True:
+#     cmds = input("-> ").lower().split(" ")
+#     if cmds[0] in ["n", "s", "e", "w"]:
+#         player.travel(cmds[0], True)
+#     elif cmds[0] == "q":
+#         break
+#     else:
+#         print("I did not understand that command.")
